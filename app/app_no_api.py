@@ -1,9 +1,13 @@
 VERSION = '0.0.0'
 
 import os, logging
+from io import BytesIO
 
 import requests
 import gradio as gr
+from fastapi import UploadFile
+
+from backend_api import infer_audio, infer_youtube
 
 
 checkpoint = "openai/whisper-large-v3"
@@ -73,9 +77,9 @@ if __name__ == "__main__":
             inputs = f.read()
         
         progress(0, desc="Transcribing...")
-        req_url = f"{API_URL}/infer_audio?task={task}&return_timestamps={return_timestamps}"
-        files = {"file": inputs}
-        response = requests.post(req_url, files=files)
+        file_like = BytesIO(inputs)
+        upload_file = UploadFile(filename="example.wav", file=file_like)
+        response = infer_audio(task, str(return_timestamps), upload_file)
         if response.status_code == 200:
             res_json = response.json()
             return res_json['transcription'], res_json['runtime_seconds']
@@ -96,8 +100,7 @@ if __name__ == "__main__":
         html_embed_str = _return_yt_html_embed(yt_url)
 
         progress(0, desc="Transcribing...")
-        req_url = f"{API_URL}/infer_youtube?youtube_url={yt_url}&task={task}&return_timestamps={return_timestamps}"
-        response = requests.post(req_url)
+        response = infer_youtube(yt_url, task, str(return_timestamps))
         if response.status_code == 200:
             res_json = response.json()
             return html_embed_str, res_json['transcription'], res_json['runtime_seconds']
