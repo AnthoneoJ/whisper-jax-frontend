@@ -1,4 +1,4 @@
-VERSION = '0.0.0'
+VERSION = '0.0.1'
 
 import os, time, tempfile, logging
 from multiprocessing import Pool
@@ -15,7 +15,7 @@ from whisper_jax import FlaxWhisperPipline
 
 
 cc.initialize_cache("./jax_cache")
-checkpoint = "openai/whisper-large-v3"
+checkpoint = "openai/whisper-medium" #openai/whisper-large-v3
 
 BATCH_SIZE = 32
 CHUNK_LENGTH_S = 30
@@ -30,7 +30,7 @@ formatter = logging.Formatter("%(asctime)s;%(levelname)s;%(message)s", "%Y-%m-%d
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-pipeline = FlaxWhisperPipline(checkpoint, dtype=jnp.bfloat16, batch_size=BATCH_SIZE)
+pipeline = FlaxWhisperPipline(checkpoint, dtype=jnp.float16, batch_size=BATCH_SIZE)
 stride_length_s = CHUNK_LENGTH_S / 6
 chunk_len = round(CHUNK_LENGTH_S * pipeline.feature_extractor.sampling_rate)
 stride_left = stride_right = round(stride_length_s * pipeline.feature_extractor.sampling_rate)
