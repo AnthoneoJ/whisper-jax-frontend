@@ -1,0 +1,8 @@
+jax[cuda12]
+numpy
+transformers>=4.46.0
+yt-dlp
+cached-property
+flax
+ipywidgets
+fastapi>=0.115.3

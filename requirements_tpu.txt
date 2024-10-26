@@ -1,0 +1,9 @@
+-f https://storage.googleapis.com/jax-releases/libtpu_releases.html
+jax[tpu]
+numpy
+transformers>=4.46.0
+yt-dlp
+cached-property
+flax
+ipywidgets
+fastapi>=0.115.3

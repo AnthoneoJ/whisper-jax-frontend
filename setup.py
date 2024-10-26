@@ -22,7 +22,7 @@ from setuptools import find_packages, setup
 
 
 _deps = [
-    "transformers>=4.45.0",
+    "transformers>=4.46.0",
     "flax",
     "cached-property",
 ]
@@ -34,7 +34,7 @@ _extras_dev_deps = [
 ]
 
 _extras_endpoint_deps = [
-    "gradio>=4.9.1",
+    "gradio>=4.44.1",
     "requests>=2.28.2",
     "yt-dlp>=2023.3.4",
 ]

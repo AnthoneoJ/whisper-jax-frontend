@@ -1,5 +1,8 @@
 # Adapted from https://github.com/huggingface/diffusers/blob/main/.gitignore
 
+# Custom
+_backup/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

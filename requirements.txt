@@ -1,5 +1,0 @@
-numpy
-transformers
-yt-dlp
-fastapi
-jax[cuda12]

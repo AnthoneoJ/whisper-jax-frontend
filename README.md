@@ -1,18 +1,6 @@
 # USAGE
 
-## Method 1:
-
-1. pip install -r requirements.txt
-2. pip install -r app/requirements.txt
-3. run main.ipynb
-
-## Method 2 - Run via Hugging Face Space:
-
-1. pip install -r requirements.txt
-2. pip install nest-asyncio pyngrok
-3. ngrok config add-authtoken [YOUR-NGROK-TOKEN] (https://dashboard.ngrok.com/get-started/your-authtoken)
-4. python server_ngrok.py
-5. Copy Public URL. Update API URL in UI settings.
+Refer to main.ipynb
 
 
 # Whisper JAX
