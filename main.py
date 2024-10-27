@@ -1,4 +1,4 @@
-MAIN_VERSION = '0.0.3'
+MAIN_VERSION = '0.0.4'
 
 import os
 
@@ -193,6 +193,28 @@ if __name__ == "__main__":
     
     print(f'FRONTEND VERSION: {MAIN_VERSION}')
 
+    def save_string_to_txt(string_to_save):
+        '''Saves a string to a text file with a dynamic filename.
+
+        Args:
+            string_to_save: The string to be saved.
+        '''
+        temp_dir = '_temp'
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+
+        # Get current epoch milliseconds
+        epoch_ms = int(round(time.time() * 1000))
+
+        # Construct the filename
+        filename = os.path.join(temp_dir, f'_temp_transcript_{epoch_ms}.txt')
+
+        # Write the string to the file
+        with open(filename, 'w') as f:
+            f.write(string_to_save)
+
+        return filename
+
     def transcribe_chunked_audio(inputs, task, return_timestamps, progress=gr.Progress()):
         if task.lower() == 'none':
             task = None
@@ -218,7 +240,8 @@ if __name__ == "__main__":
         response = infer_audio(task, str(return_timestamps), inputs_bytes)
         if response:
             res_json = response #response.json()
-            return res_json['transcription'], res_json['runtime_seconds']
+            transcript_path = save_string_to_txt(res_json['transcription'])
+            return res_json['transcription'], transcript_path, res_json['runtime_seconds']
         else:
             raise gr.Error(str(response), 0)
 
@@ -234,7 +257,8 @@ if __name__ == "__main__":
         response = infer_youtube(yt_url, task, str(return_timestamps))
         if response:
             res_json = response #response.json()
-            return html_embed_str, res_json['transcription'], res_json['runtime_seconds']
+            transcript_path = save_string_to_txt(res_json['transcription'])
+            return html_embed_str, res_json['transcription'], transcript_path, res_json['runtime_seconds']
         else:
             raise gr.Error(str(response), 0)
         
@@ -254,7 +278,8 @@ if __name__ == "__main__":
             gr.Checkbox(value=False, label="Return timestamps"),
         ],
         outputs=[
-            gr.Textbox(label="Transcription", show_copy_button=True),
+            gr.Textbox(label="Transcription", show_label=True, show_copy_button=True),
+            gr.File(label="Transcription text file"),
             gr.Textbox(label="Transcription Time (s)"),
         ],
         allow_flagging="never",
@@ -271,7 +296,8 @@ if __name__ == "__main__":
             gr.Checkbox(value=False, label="Return timestamps"),
         ],
         outputs=[
-            gr.Textbox(label="Transcription", show_copy_button=True),
+            gr.Textbox(label="Transcription", show_label=True, show_copy_button=True),
+            gr.File(label="Transcription text file"),
             gr.Textbox(label="Transcription Time (s)"),
         ],
         allow_flagging="never",
@@ -289,7 +315,8 @@ if __name__ == "__main__":
         ],
         outputs=[
             gr.HTML(label="Video"),
-            gr.Textbox(label="Transcription", show_copy_button=True),
+            gr.Textbox(label="Transcription", show_label=True, show_copy_button=True),
+            gr.File(label="Transcription text file"),
             gr.Textbox(label="Transcription Time (s)"),
         ],
         allow_flagging="never",
